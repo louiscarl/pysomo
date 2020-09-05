@@ -3,7 +3,7 @@
 _pysomo_ (for **so**lid **mo**deling) is a small solid modeling library. This library allows you to create 3D models in Python and export them to various 3D file formats.
 
 ## Requirements
-_pysomo_ creates an _xcsg_ file, an XML file that can be parsed by the _xcsg_ application to create export your models in various file formats. _pysomo_ does not include _xcsg_, it can be downloaded separately: [download xcsg](https://github.com/arnholm/xcsg).
+_pysomo_ creates an _xcsg_ file, an XML file that can be parsed by the _xcsg_ application to create export your models in various file formats. _pysomo_ does not include _xcsg_, it can be downloaded separately: [download xcsg](https://github.com/arnholm/xcsg/releases).
 
 ## Installation
 1. To install, simply run `pip install pysomo`
