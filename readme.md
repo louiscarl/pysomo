@@ -12,7 +12,7 @@ _pysomo_ creates an _xcsg_ file, an XML file that can be parsed by the _xcsg_ ap
 ## Examples
 
 ### Extrusion
-![Extrusion solid](/img/solid.png)
+![Extrusion solid](/img/extrusion.png)
 The following code creates the solid above.
 ```
 import pysomo as csg
