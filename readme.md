@@ -37,7 +37,7 @@ csg.Exporter(r"solid.xcsg").export_obj(root)  # Exports as obj
 ### Stairs
 ![Stairs](/img/stairs.png)
 
-The following code builds the stairs above up to the maximum height allowed by a building code, using the maximum step height allowed. It demonstrates modelisation via code. It also demonstrates that figures do not mutate when an operation is applied. Instead, every operation returns a new figure.
+The following code builds the staircase above up to the maximum height allowed by a building code, using the maximum step height allowed. It demonstrates modelisation via code. It also demonstrates that figures do not mutate when an operation is applied. Instead, every operation returns a new figure.
 ```
 def to_meters(inches):
     return 0.0254 * inches
@@ -63,7 +63,7 @@ step_count = 1  # Number of steps in the stairs
 while (step_count + 1) * max_riser_height < max_stair_height:
     # Note that every operation returns a new solid and does not modify the
     # original step, so you can reuse the solid for every translation.
-    steps = steps + step.translate(
+    steps += step.translate(
         0,
         max_riser_height * step_count,
         min_tread_depth * step_count)
@@ -93,3 +93,6 @@ root = somo.Root(steps + stringers)
 # Export to obj format.
 somo.Exporter(r"stairs.xcsg").export_obj(root)
 ```
+And then if we add a zer-
+
+![Stairs](/img/superstairs.png)

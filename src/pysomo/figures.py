@@ -89,10 +89,6 @@ class Shape(Figure):
         """
         return Minkowski2d(self, other)
 
-    def projection(self) -> Shape:
-        """Projects onto the XY plane."""
-        return Projection2d(self)
-
     def translate(self, x, y, z=0) -> Shape:
         """Translates a shape in 2d"""
         shape = Shape(self.type_, self.attributes)
@@ -133,7 +129,7 @@ class Solid(Figure):
         """
         return Minkowski3d(self, other)
 
-    def projection(self) -> Shape:
+    def project(self) -> Shape:
         """Projects onto the XY plane."""
         return Projection2d(self)
 
