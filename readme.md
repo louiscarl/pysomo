@@ -13,7 +13,8 @@ _pysomo_ creates an _xcsg_ file, an XML file that can be parsed by the _xcsg_ ap
 
 ### Extrusion
 ![Extrusion solid](/img/extrusion.png)
-The following code creates the solid above.
+
+The following code creates the solid above, subtracting a square shape from a circle.
 ```
 import pysomo as csg
 
@@ -32,6 +33,7 @@ csg.Exporter(r"solid.xcsg").export_obj(root) # Exports as obj
 
 ### Stairs
 ![Stairs](/img/stairs.png)
+
 The following code builds the stairs above up to the maximum height allowed by a building code, using the maximum step height allowed.
 ```
 # Let's say these are the building code requirements for stairs, in inches.
