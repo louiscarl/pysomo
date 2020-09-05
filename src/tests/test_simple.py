@@ -1,13 +1,13 @@
-import pytest
-
 import pysomo as csg
+
 
 def arguments_to_attributes(args):
     arguments = []
-    for a in args:
+    for a in sorted(args):
         value = args[a]
         arguments.append(f'{a}="{value}"')
     return ' '.join(arguments)
+
 
 def test_operations2d():
     s = csg.Square(40)
@@ -21,8 +21,9 @@ def test_operations2d():
     for operation in operations:
         op, name = operation
         actual = csg.Root(op(s, c)).dump_xcsg()
-        expected = f'<xcsg version="1.0"><{name}><square size="40" center="true"/><circle r="30"/></{name}></xcsg>'
+        expected = f'<xcsg version="1.0"><{name}><square center="true" size="40" /><circle r="30" /></{name}></xcsg>'
         assert expected in actual
+
 
 def test_operations3d():
     c = csg.Cube(40)
@@ -36,8 +37,9 @@ def test_operations3d():
     for operation in operations:
         op, name = operation
         actual = csg.Root(op(c, s)).dump_xcsg()
-        expected = f'<xcsg version="1.0"><{name}><cube size="40" center="true"/><sphere r="30"/></{name}></xcsg>'
+        expected = f'<xcsg version="1.0"><{name}><cube center="true" size="40" /><sphere r="30" /></{name}></xcsg>'
         assert expected in actual
+
 
 def test_simple_shapes():
     shapes = [
@@ -49,8 +51,9 @@ def test_simple_shapes():
     for shape in shapes:
         sh, name, args = shape
         actual = csg.Root(sh()).dump_xcsg()
-        expected = f'<xcsg version="1.0"><{name} {arguments_to_attributes(args)}/></xcsg>'
+        expected = f'<xcsg version="1.0"><{name} {arguments_to_attributes(args)} /></xcsg>'
         assert expected in actual
+
 
 def test_simple_solids():
     shapes = [
@@ -64,8 +67,9 @@ def test_simple_solids():
     for shape in shapes:
         sh, name, args = shape
         actual = csg.Root(sh()).dump_xcsg()
-        expected = f'<xcsg version="1.0"><{name} {arguments_to_attributes(args)}/></xcsg>'
+        expected = f'<xcsg version="1.0"><{name} {arguments_to_attributes(args)} /></xcsg>'
         assert expected in actual
+
 
 def test_simple_extrude():
     c = csg.Circle(30)
@@ -77,8 +81,9 @@ def test_simple_extrude():
     for extrusion in extrusions:
         extr, name, args = extrusion
         actual = csg.Root(extr(c)).dump_xcsg()
-        expected = f'<xcsg version="1.0"><{name} {arguments_to_attributes(args)}><circle r="30"/></{name}></xcsg>'
+        expected = f'<xcsg version="1.0"><{name} {arguments_to_attributes(args)}><circle r="30" /></{name}></xcsg>'
         assert expected in actual
+
 
 def test_polygon():
     vertices = [
@@ -92,10 +97,11 @@ def test_polygon():
     r = csg.Root(p)
 
     actual = r.dump_xcsg()
-    expected_vertices = ''.join([f'<vertex x="{x}" y="{y}"/>' for x, y in vertices])
+    expected_vertices = ''.join([f'<vertex x="{x}" y="{y}" />' for x, y in vertices])
     expected = f'<xcsg version="1.0"><polygon><vertices>{expected_vertices}</vertices></polygon></xcsg>'
 
     assert expected in actual
+
 
 def test_translated_polygon():
     vertices = [
@@ -109,8 +115,8 @@ def test_translated_polygon():
     r = csg.Root(p)
 
     actual = r.dump_xcsg()
-    expected_vertices = ''.join([f'<vertex x="{x}" y="{y}"/>' for x, y in vertices])
-    expected_tmatrix = '<trow c0="1" c1="0" c2="0" c3="-1"/><trow c0="0" c1="1" c2="0" c3="-1"/><trow c0="0" c1="0" c2="1" c3="0"/><trow c0="0" c1="0" c2="0" c3="1"/>'
+    expected_vertices = ''.join([f'<vertex x="{x}" y="{y}" />' for x, y in vertices])
+    expected_tmatrix = '<trow c0="1" c1="0" c2="0" c3="-1" /><trow c0="0" c1="1" c2="0" c3="-1" /><trow c0="0" c1="0" c2="1" c3="0" /><trow c0="0" c1="0" c2="0" c3="1" />'
     expected = f'<xcsg version="1.0"><polygon><vertices>{expected_vertices}</vertices><tmatrix>{expected_tmatrix}</tmatrix></polygon></xcsg>'
 
     assert expected in actual
@@ -133,8 +139,8 @@ def test_simple_polyhedron():
     r = csg.Root(p)
 
     actual = r.dump_xcsg()
-    expected_vertices = ''.join([f'<vertex x="{x}" y="{y}" z="{z}"/>' for x, y, z in vertices])
-    expected_tmatrix = '<trow c0="1" c1="0" c2="0" c3="-1"/><trow c0="0" c1="1" c2="0" c3="-1"/><trow c0="0" c1="0" c2="1" c3="-1"/><trow c0="0" c1="0" c2="0" c3="1"/>'
+    expected_vertices = ''.join([f'<vertex x="{x}" y="{y}" z="{z}" />' for x, y, z in vertices])
+    expected_tmatrix = '<trow c0="1" c1="0" c2="0" c3="-1" /><trow c0="0" c1="1" c2="0" c3="-1" /><trow c0="0" c1="0" c2="1" c3="-1" /><trow c0="0" c1="0" c2="0" c3="1" />'
     expected = f'<xcsg version="1.0"><polyhedron><vertices>{expected_vertices}</vertices><tmatrix>{expected_tmatrix}</tmatrix></polyhedron></xcsg>'
 
     assert expected in actual

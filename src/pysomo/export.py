@@ -1,5 +1,6 @@
 import subprocess
 
+
 class Exporter(object):
     def __init__(self, path):
         self.path = path
@@ -8,7 +9,8 @@ class Exporter(object):
         with open(self.path, 'w') as o:
             o.write(root.dump_xcsg())
 
-        process = subprocess.Popen(['xcsg', '--obj', self.path],
+        process = subprocess.Popen(
+            ['xcsg', '--obj', self.path],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()

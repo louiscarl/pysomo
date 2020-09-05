@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from lxml import etree
-from typing import NewType
+import xml.etree.ElementTree as ET
+
 
 class Figure(object):
     def __init__(self, type_, attributes=None):
@@ -13,10 +13,11 @@ class Figure(object):
         attr = dict()
         for a in self.attributes.keys():
             attr[a] = str(self.attributes[a])
-        e = etree.SubElement(parent, self.type_, attr)
+        e = ET.SubElement(parent, self.type_, attr)
 
         for c in self.children:
             c.__sub_element__(e)
+
 
 class Shape(Figure):
     def __init__(self, type_, attributes=None):
@@ -99,9 +100,11 @@ class Shape(Figure):
         shape.children.append(Translation3d(x, y, z, 1))
         return shape
 
+
 class Solid(Figure):
     '''
-    The base shape for any solid, including the results of operations. This shouldn't have to be used directly.
+    The base shape for any solid, including the results of operations. This
+    shouldn't have to be used directly.
     '''
 
     def __init__(self, type_, attributes=None):
@@ -141,11 +144,13 @@ class Solid(Figure):
         solid.children.append(Translation3d(x, y, z, 1))
         return solid
 
+
 class LinearExtrude(Solid):
     def __init__(self, a: Shape, dz):
         super().__init__('linear_extrude')
         self.children.append(a)
         self.attributes['dz'] = dz
+
 
 class RotateExtrude(Solid):
     def __init__(self, a: Shape, angle, pitch):
@@ -154,11 +159,13 @@ class RotateExtrude(Solid):
         self.attributes['angle'] = angle
         self.attributes['pitch'] = pitch
 
+
 class TransformExtrude(Solid):
     def __init__(self, a: Shape, b: Shape):
         super().__init__('transform_extrude')
         self.children.append(a)
         self.children.append(b)
+
 
 class Sweep(Solid):
     def __init__(self, a: Shape, spline_path):
@@ -166,10 +173,12 @@ class Sweep(Solid):
         self.children.append(a)
         self.children.append(spline_path)
 
+
 class Fill2d(Shape):
     def __init__(self, a: Shape):
         super().__init__('fill2d')
         self.children.append(a)
+
 
 class Offset2d(Shape):
     def __init__(self, a: Shape, delta, round_, chamfer):
@@ -179,11 +188,13 @@ class Offset2d(Shape):
         self.attributes['round'] = round_
         self.attributes['chamfer'] = chamfer
 
+
 class Hull2d(Shape):
     def __init__(self, a: Shape, b: Shape):
         super().__init__('hull2d')
         self.children.append(a)
         self.children.append(b)
+
 
 class Minkowski2d(Shape):
     def __init__(self, a: Shape, b: Shape):
@@ -191,10 +202,12 @@ class Minkowski2d(Shape):
         self.children.append(a)
         self.children.append(b)
 
+
 class Projection2d(Shape):
     def __init__(self, a: Shape):
         super().__init__('projection2d')
         self.children.append(a)
+
 
 class Operation2d(Shape):
     def __init__(self, shape_type, a: Shape, b: Shape):
@@ -202,28 +215,34 @@ class Operation2d(Shape):
         self.children.append(a)
         self.children.append(b)
 
+
 class Intersection2d(Operation2d):
     def __init__(self, a: Shape, b: Shape):
         super().__init__('intersection2d', a, b)
+
 
 class Difference2d(Operation2d):
     def __init__(self, a: Shape, b: Shape):
         super().__init__('difference2d', a, b)
 
+
 class Union2d(Operation2d):
     def __init__(self, a: Shape, b: Shape):
         super().__init__('union2d', a, b)
+
 
 class Circle(Shape):
     def __init__(self, radius):
         super().__init__('circle')
         self.attributes['r'] = radius
 
+
 class Square(Shape):
     def __init__(self, size, center='true'):
         super().__init__('square')
         self.attributes['size'] = size
         self.attributes['center'] = center
+
 
 class Rectangle(Shape):
     def __init__(self, dx: float, dy: float, center='true'):
@@ -232,15 +251,18 @@ class Rectangle(Shape):
         self.attributes['dy'] = dy
         self.attributes['center'] = center
 
+
 class Polygon(Shape):
     def __init__(self, vertices):
         super().__init__('polygon')
         self.children.append(Vertices2d(vertices))
 
+
 class Vertices2d(Shape):
     def __init__(self, vertices):
         super().__init__('vertices')
         self.children += [Vertex2d.from_tuple(v) for v in vertices]
+
 
 class Vertex2d(Figure):
     def __init__(self, x: float, y: float):
@@ -253,23 +275,28 @@ class Vertex2d(Figure):
         x, y = vertex
         return Vertex2d(x, y)
 
+
 class Operation3d(Solid):
     def __init__(self, solid_type, a: Solid, b: Solid):
         super().__init__(solid_type)
         self.children.append(a)
         self.children.append(b)
 
+
 class Intersection3d(Operation3d):
     def __init__(self, a: Solid, b: Solid):
         super().__init__('intersection3d', a, b)
+
 
 class Difference3d(Operation3d):
     def __init__(self, a: Solid, b: Solid):
         super().__init__('difference3d', a, b)
 
+
 class Union3d(Operation3d):
     def __init__(self, a: Solid, b: Solid):
         super().__init__('union3d', a, b)
+
 
 class Hull3d(Solid):
     def __init__(self, a: Solid, b: Solid):
@@ -277,11 +304,13 @@ class Hull3d(Solid):
         self.children.append(a)
         self.children.append(b)
 
+
 class Minkowski3d(Solid):
     def __init__(self, a: Solid, b: Solid):
         super().__init__('minkowski3d')
         self.children.append(a)
         self.children.append(b)
+
 
 class Cone(Solid):
     def __init__(self, r1: float,  r2: float,  h: float,  center='true'):
@@ -291,16 +320,19 @@ class Cone(Solid):
         self.attributes['h'] = h
         self.attributes['center'] = center
 
+
 class Sphere(Solid):
     def __init__(self, radius):
         super().__init__('sphere')
         self.attributes['r'] = radius
+
 
 class Cube(Solid):
     def __init__(self, size, center='true'):
         super().__init__('cube')
         self.attributes['size'] = size
         self.attributes['center'] = center
+
 
 class Cuboid(Solid):
     def __init__(self, dx: float, dy: float, dz: float, center='true'):
@@ -310,6 +342,7 @@ class Cuboid(Solid):
         self.attributes['dz'] = dz
         self.attributes['center'] = center
 
+
 class Cylinder(Solid):
     def __init__(self, r: float,  h: float,  center='true'):
         super().__init__('cylinder')
@@ -317,15 +350,18 @@ class Cylinder(Solid):
         self.attributes['h'] = h
         self.attributes['center'] = center
 
+
 class Polyhedron(Solid):
     def __init__(self, vertices):
         super().__init__('polyhedron')
         self.children.append(Vertices3d(vertices))
 
+
 class Vertices3d(Figure):
     def __init__(self, vertices):
         super().__init__('vertices')
         self.children += [Vertex3d.from_tuple(v) for v in vertices]
+
 
 class Vertex3d(Figure):
     def __init__(self, x, y, z):
@@ -339,21 +375,25 @@ class Vertex3d(Figure):
         x, y, z = vertex
         return Vertex3d(x, y, z)
 
+
 class Face(Figure):
     def __init__(self, indexes):
         super().__init__()
         for i in indexes:
             self.children.append(Fv(i))
 
+
 class Fv(Figure):
     def __init__(self, index):
         super().__init__()
         self.attributes['index'] = index
 
+
 class TMatrix(Figure):
     def __init__(self, rows):
         super().__init__('tmatrix')
         self.children += rows
+
 
 class TRow(Figure):
     def __init__(self, c0, c1, c2, c3):
@@ -362,6 +402,7 @@ class TRow(Figure):
         self.attributes['c1'] = c1
         self.attributes['c2'] = c2
         self.attributes['c3'] = c3
+
 
 class Translation3d(TMatrix):
     def __init__(self, x, y, z, w):
