@@ -1,0 +1,14 @@
+# 3d model files
+*.xcsg
+*.obj
+
+# xcsg
+*.txt
+*.exe
+
+# Editors
+.vscode/*
+
+# Python generated
+.coverage
+*.pyc
