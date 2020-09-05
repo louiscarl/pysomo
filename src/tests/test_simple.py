@@ -3,7 +3,7 @@ import pysomo as csg
 
 def arguments_to_attributes(args):
     arguments = []
-    for a in sorted(args):
+    for a in args:
         value = args[a]
         arguments.append(f'{a}="{value}"')
     return ' '.join(arguments)
@@ -21,7 +21,7 @@ def test_operations2d():
     for operation in operations:
         op, name = operation
         actual = csg.Root(op(s, c)).dump_xcsg()
-        expected = f'<xcsg version="1.0"><{name}><square center="true" size="40" /><circle r="30" /></{name}></xcsg>'
+        expected = f'<xcsg version="1.0"><{name}><square size="40" center="true" /><circle r="30" /></{name}></xcsg>'
         assert expected in actual
 
 
@@ -37,7 +37,7 @@ def test_operations3d():
     for operation in operations:
         op, name = operation
         actual = csg.Root(op(c, s)).dump_xcsg()
-        expected = f'<xcsg version="1.0"><{name}><cube center="true" size="40" /><sphere r="30" /></{name}></xcsg>'
+        expected = f'<xcsg version="1.0"><{name}><cube size="40" center="true" /><sphere r="30" /></{name}></xcsg>'
         assert expected in actual
 
 
