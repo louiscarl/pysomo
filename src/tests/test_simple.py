@@ -18,7 +18,7 @@ def assert_and_export(expected_str, actual_root, name=''):
 
     if export_enabled:
         test_name = inspect.stack()[1][3]
-        file_name = f'{test_name}.xcsg' if not name else f'{test_name}_{name}.xcsg'
+        file_name = f'{test_name}.xcsg' if not name else f'{test_name}_{name}.obj'
 
         # 2d shapes need a third dimension
         if isinstance(actual_root.children[0], csg.figures.Shape):

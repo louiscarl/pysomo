@@ -31,7 +31,7 @@ solid = shape.linear_extrude(10)  # Creates a volume by extrusion
 
 # Export
 root = csg.Root(solid)  # Root of the xml document
-csg.Exporter(r"solid.xcsg").export_obj(root)  # Exports as obj
+csg.Exporter(r"solid\.obj"\).export_obj(root)  # Exports as obj
 ```
 
 ### Stairs
@@ -91,7 +91,7 @@ root = somo.Root(steps + stringers)
 
 
 # Export to obj format.
-somo.Exporter(r"stairs.xcsg").export_obj(root)
+somo.Exporter(r"stairs\.obj"\).export_obj(root)
 ```
 And then if we add a zer-
 
