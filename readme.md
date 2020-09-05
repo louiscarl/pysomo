@@ -7,15 +7,15 @@ _pysomo_ creates an _xcsg_ file, an XML file that can be parsed by the _xcsg_ ap
 
 ## Installation
 1. To install, simply run `pip install pysomo`
-2. To export from xcsg format to a 3D model file, the _xcsg_ application must be in the same directory as your application.
+2. To export from xcsg format to a 3D model file, the [_xcsg_ application](https://github.com/arnholm/xcsg) must be in the same directory as your application.
 
 ## Examples
 
 ### Extrusion
-![Extrusion solid](/img/extrusion.png)
+![Extrusion solid](https://github.com/louiscarl/pysomo/raw/master/img/extrusion.png "Extrusion of a square from a larger circle.")
 
 The following code creates the solid above, subtracting a square shape from a circle.
-```
+```python
 import pysomo as csg
 
 
@@ -35,10 +35,10 @@ csg.Exporter(r"solid.obj").export_obj(root)  # Exports as obj
 ```
 
 ### Stairs
-![Stairs](/img/stairs.png)
+![Stairs](https://github.com/louiscarl/pysomo/raw/master/img/stairs.png "Generated stairs at a compliant height.")
 
 The following code builds the staircase above up to the maximum height allowed by a building code, using the maximum step height allowed. It demonstrates modelisation via code. It also demonstrates that figures do not mutate when an operation is applied. Instead, every operation returns a new figure.
-```
+```python
 def to_meters(inches):
     return 0.0254 * inches
 
@@ -95,4 +95,4 @@ somo.Exporter(r"stairs.obj").export_obj(root)
 ```
 And then if we add a zer-
 
-![Stairs](/img/superstairs.png)
+![Stairs](https://github.com/louiscarl/pysomo/raw/master/img/superstairs.png "Generated staircase that is way too high.")

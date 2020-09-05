@@ -12,3 +12,5 @@
 # Python generated
 .coverage
 *.pyc
+*.egg-info
+dist/**
