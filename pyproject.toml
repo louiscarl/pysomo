@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "pysomo"
+version = "0.0.6"
+description = "A small solid modeling library."
+authors = ["Louis Carl Pepin <lcpepin@louiscarl.com>"]
+license = "MIT"
+repository = "https://github.com/louiscarl/pysomo"
+readme = "readme.md"
+classifiers = [
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Multimedia :: Graphics :: 3D Modeling"
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
