@@ -1,5 +1,8 @@
 # pysomo
 
+![PyPI version](https://img.shields.io/pypi/pyversions/pysomo)
+![Tests](https://img.shields.io/github/workflow/status/louiscarl/pysomo/Python%20application?label=tests)
+
 _pysomo_ (for **so**lid **mo**deling) is a small solid modeling library. This library allows you to create 3D models in Python and export them to various 3D file formats.
 
 ## Requirements
