@@ -73,7 +73,7 @@ class Shape(Figure):
         """
         return Hull2d(self, other)
 
-    def offset(self, delta, round_, chamfer) -> Shape:
+    def offset(self, delta, round_, chamfer=False) -> Shape:
         """Adds a offset (margin).
         Arguments:
             delta:
