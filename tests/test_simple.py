@@ -163,10 +163,14 @@ def test_scaled_sphere():
 
 
 def test_rotated_cuboid():
-    c = csg.Cuboid(10, 1, 1).rotate(z=math.pi/4)
+    angle = math.pi / 4
+    c = csg.Cuboid(10, 1, 1).rotate(z=angle)
     actual = csg.Root(c)
 
-    expected_tmatrix = '<trow c0="0.7071067811865476" c1="-0.7071067811865476" c2="0" c3="0" /><trow c0="0.7071067811865476" c1="0.7071067811865476" c2="0" c3="0" /><trow c0="0" c1="0" c2="1" c3="0" /><trow c0="0" c1="0" c2="0" c3="1" />'
+    cos_ = math.cos(angle)
+    sin_ = math.sin(angle)
+
+    expected_tmatrix = f'<trow c0="{cos_}" c1="-{sin_}" c2="0" c3="0" /><trow c0="{sin_}" c1="{cos_}" c2="0" c3="0" /><trow c0="0" c1="0" c2="1" c3="0" /><trow c0="0" c1="0" c2="0" c3="1" />'
     expected = f'<xcsg version="1.0"><cuboid dx="10" dy="1" dz="1" center="true"><tmatrix>{expected_tmatrix}</tmatrix></cuboid></xcsg>'
     assert_and_export(expected, actual)
 
