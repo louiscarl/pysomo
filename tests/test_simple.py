@@ -15,6 +15,11 @@ def arguments_to_attributes(args):
 
 
 def assert_and_export(expected_str, actual_root, name=''):
+    if expected_str not in actual_root.dump_xcsg():
+        print('expected_str:')
+        print(expected_str)
+        print('actual str:')
+        print(actual_root.dump_xcsg())
     assert expected_str in actual_root.dump_xcsg()
 
     if export_enabled:
