@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from math import cos, sin
+
 import xml.etree.ElementTree as ET
 
 
@@ -89,11 +91,18 @@ class Shape(Figure):
         """
         return Minkowski2d(self, other)
 
-    def translate(self, x, y, z=0) -> Shape:
+    def translate(self, x, y) -> Shape:
         """Translates a shape in 2d"""
         shape = Shape(self.type_, self.attributes)
         shape.children += self.children
-        shape.children.append(Translation3d(x, y, z, 1))
+        shape.children.append(Translation3d(x, y, 0, 1))
+        return shape
+
+    def scale(self, x=1, y=1) -> Shape:
+        """Scales a shape in 2d"""
+        shape = Shape(self.type_, self.attributes)
+        shape.children += self.children
+        shape.children.append(Scale3d(x, y, 1, 1))
         return shape
 
 
@@ -133,11 +142,33 @@ class Solid(Figure):
         """Projects onto the XY plane."""
         return Projection2d(self)
 
-    def translate(self, x, y, z) -> Shape:
-        """Translates a shape in 3d"""
+    def translate(self, x, y, z) -> Solid:
+        """Translates a solid in 3d"""
         solid = Solid(self.type_, self.attributes)
         solid.children += self.children
         solid.children.append(Translation3d(x, y, z, 1))
+        return solid
+
+    def scale(self, x=1, y=1, z=1) -> Solid:
+        """Scales a solid in 3d"""
+        solid = Solid(self.type_, self.attributes)
+        solid.children += self.children
+        solid.children.append(Scale3d(x, y, z, 1))
+        return solid
+
+    def rotate(self, x=0, y=0, z=0) -> Solid:
+        """Rotates a shape in 2d"""
+        if (x != 0 and (y != 0 or z != 0)) or (y != 0 and z != 0):
+            raise Exception("Only one axis should be set at a time.")
+
+        solid = Solid(self.type_, self.attributes)
+        solid.children += self.children
+        if x != 0:
+            solid.children.append(RotateX3d(x))
+        elif y != 0:
+            solid.children.append(RotateY3d(y))
+        else:
+            solid.children.append(RotateZ3d(z))
         return solid
 
 
@@ -407,5 +438,49 @@ class Translation3d(TMatrix):
             TRow(0, 1, 0, y),
             TRow(0, 0, 1, z),
             TRow(0, 0, 0, w)
+        )
+        super().__init__(rows)
+
+
+class Scale3d(TMatrix):
+    def __init__(self, x, y, z, w):
+        rows = (
+            TRow(x, 0, 0, 0),
+            TRow(0, y, 0, 0),
+            TRow(0, 0, z, 0),
+            TRow(0, 0, 0, w)
+        )
+        super().__init__(rows)
+
+
+class RotateX3d(TMatrix):
+    def __init__(self, angle):
+        rows = (
+            TRow(0, cos(angle), -sin(angle), 0),
+            TRow(0, sin(angle),  cos(angle), 0),
+            TRow(1,          0,           0, 0),
+            TRow(0,          0,           0, 1)
+        )
+        super().__init__(rows)
+
+
+class RotateY3d(TMatrix):
+    def __init__(self, angle):
+        rows = (
+            TRow(-sin(angle), 0, cos(angle), 0),
+            TRow( cos(angle), 0, sin(angle), 0),  # noqa: E201
+            TRow(          0, 1,          0, 0),  # noqa: E201
+            TRow(          0, 0,          0, 1)   # noqa: E201
+        )
+        super().__init__(rows)
+
+
+class RotateZ3d(TMatrix):
+    def __init__(self, angle):
+        rows = (
+            TRow(cos(angle), -sin(angle), 0, 0),
+            TRow(sin(angle),  cos(angle), 0, 0),
+            TRow(         0,          0,  1, 0),  # noqa: E201
+            TRow(         0,          0,  0, 1)   # noqa: E201
         )
         super().__init__(rows)
