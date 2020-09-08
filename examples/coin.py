@@ -10,7 +10,7 @@ coin = coin_circle.linear_extrude(2)
 coin_extr = coin_circle.offset(-5, True).linear_extrude(1)
 
 
-# Now we use the subtraction operator to extrude our shapes from the coin.
+# Now we use the subtraction operator to exclude our shapes from the coin.
 coin = coin - coin_extr.translate(0, 0, 1.5) - coin_extr.translate(0, 0, -0.5)
 
 

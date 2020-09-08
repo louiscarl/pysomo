@@ -1,4 +1,5 @@
 import inspect
+import math
 
 import pysomo as csg
 
@@ -14,11 +15,16 @@ def arguments_to_attributes(args):
 
 
 def assert_and_export(expected_str, actual_root, name=''):
+    if expected_str not in actual_root.dump_xcsg():
+        print('expected_str:')
+        print(expected_str)
+        print('actual str:')
+        print(actual_root.dump_xcsg())
     assert expected_str in actual_root.dump_xcsg()
 
     if export_enabled:
         test_name = inspect.stack()[1][3]
-        file_name = f'{test_name}.xcsg' if not name else f'{test_name}_{name}.obj'
+        file_name = f'{test_name}.obj' if not name else f'{test_name}_{name}.obj'
 
         # 2d shapes need a third dimension
         if isinstance(actual_root.children[0], csg.figures.Shape):
@@ -138,6 +144,37 @@ def test_translated_polygon():
     assert_and_export(expected, actual)
 
 
+def test_scaled_circle():
+    c = csg.Circle(10).scale(x=2)
+    actual = csg.Root(c)
+
+    expected_tmatrix = '<trow c0="2" c1="0" c2="0" c3="0" /><trow c0="0" c1="1" c2="0" c3="0" /><trow c0="0" c1="0" c2="1" c3="0" /><trow c0="0" c1="0" c2="0" c3="1" />'
+    expected = f'<xcsg version="1.0"><circle r="10"><tmatrix>{expected_tmatrix}</tmatrix></circle></xcsg>'
+    assert_and_export(expected, actual)
+
+
+def test_scaled_sphere():
+    s = csg.Sphere(10).scale(x=2)
+    actual = csg.Root(s)
+
+    expected_tmatrix = '<trow c0="2" c1="0" c2="0" c3="0" /><trow c0="0" c1="1" c2="0" c3="0" /><trow c0="0" c1="0" c2="1" c3="0" /><trow c0="0" c1="0" c2="0" c3="1" />'
+    expected = f'<xcsg version="1.0"><sphere r="10"><tmatrix>{expected_tmatrix}</tmatrix></sphere></xcsg>'
+    assert_and_export(expected, actual)
+
+
+def test_rotated_cuboid():
+    angle = math.pi / 4
+    c = csg.Cuboid(10, 1, 1).rotate(z=angle)
+    actual = csg.Root(c)
+
+    cos_ = math.cos(angle)
+    sin_ = math.sin(angle)
+
+    expected_tmatrix = f'<trow c0="{cos_}" c1="-{sin_}" c2="0" c3="0" /><trow c0="{sin_}" c1="{cos_}" c2="0" c3="0" /><trow c0="0" c1="0" c2="1" c3="0" /><trow c0="0" c1="0" c2="0" c3="1" />'
+    expected = f'<xcsg version="1.0"><cuboid dx="10" dy="1" dz="1" center="true"><tmatrix>{expected_tmatrix}</tmatrix></cuboid></xcsg>'
+    assert_and_export(expected, actual)
+
+
 def test_simple_polyhedron():
     vertices = [
         (0, 0, 0),
@@ -212,4 +249,3 @@ def test_hull3d():
     expected = f'<xcsg version="1.0"><hull3d><cube size="10" center="true" /><sphere r="5">{expected_tmatrix}</sphere></hull3d></xcsg>'
 
     assert_and_export(expected, actual)
-

@@ -1,6 +1,7 @@
 import subprocess
 from pathlib import Path
 
+
 class Exporter(object):
     def __init__(self, path):
         self.path = Path.cwd() / path
