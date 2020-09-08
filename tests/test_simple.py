@@ -3,7 +3,7 @@ import math
 
 import pysomo as csg
 
-export_enabled = True
+export_enabled = False
 
 
 def arguments_to_attributes(args):
@@ -15,7 +15,7 @@ def arguments_to_attributes(args):
 
 
 def assert_and_export(expected_str, actual_root, name=''):
-    # assert expected_str in actual_root.dump_xcsg()
+    assert expected_str in actual_root.dump_xcsg()
 
     if export_enabled:
         test_name = inspect.stack()[1][3]
